@@ -1,3 +1,5 @@
+include <BOSL2/std.scad>
+
 // Parameter Configuration
 board_thickness = 5; // For example: 5mm
 
@@ -8,29 +10,28 @@ hole_spacing_x = 50; // Distance between holes in the X direction
 hole_spacing_y = 50; // Distance between holes in the Y direction
 hole_radius = 5; // Radius of the holes
 
-surround = 40;
+surround = 20;
+corner_radius = 20;
 
 // Colors
-board_color = [0.8, 0.8, 0.8]; // Light gray for the board
-hole_color = [1, 0, 0]; // Red for the holes
+// board_color = [0.8, 0.8, 0.8]; // Light gray for the board
+// hole_color = [1, 0, 0]; // Red for the holes
+
+raw_length = hole_spacing_x * (num_holes_x - 1);
+raw_width  = hole_spacing_y * (num_holes_y - 1);
 
 // Main Module
 module pegboard() {
     // Create the board
     difference() {
         // Create the overall board
-        union() {
-            color(hole_color) 
-            cube([hole_spacing_x * (num_holes_x - 1), 
-                hole_spacing_y * (num_holes_y - 1), 
-                board_thickness]);
-
-            // Create the surrounding
-            translate([-(surround/2), -(surround/2), 0]) {
-                cube([hole_spacing_x * (num_holes_x - 1) + (surround/1), 
-                    hole_spacing_y * (num_holes_y - 1) + (surround/1), 
-                    board_thickness]);
-            }
+        // color(hole_color) 
+        translate([raw_length/2, raw_width/2, board_thickness/2]) {
+            cuboid([raw_length + surround*2,
+                raw_width + surround*2,
+                board_thickness], 
+                rounding = corner_radius,
+                edges = "Z");
         }
 
         // Create the holes
@@ -46,3 +47,5 @@ module pegboard() {
 
 // Call the main module to generate the pegboard
 pegboard();
+
+
