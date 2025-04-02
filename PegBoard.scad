@@ -19,13 +19,13 @@ module pegboard() {
     // Create the board
     difference() {
         // Create the overall board
-
         union() {
             color(hole_color) 
             cube([hole_spacing_x * (num_holes_x - 1), 
                 hole_spacing_y * (num_holes_y - 1), 
                 board_thickness]);
 
+            // Create the surrounding
             translate([-(surround/2), -(surround/2), 0]) {
                 cube([hole_spacing_x * (num_holes_x - 1) + (surround/1), 
                     hole_spacing_y * (num_holes_y - 1) + (surround/1), 
