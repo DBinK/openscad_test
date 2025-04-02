@@ -1,5 +1,8 @@
 include <BOSL2/std.scad>
 
+$fn = 256;  // 碎片数量
+$fa = 0.1;  // 最小角度
+$fs = 0.1;  // 最小尺寸
 
 /*[ 板子参数 ]*/
 board_thickness = 3;   // 板厚 
