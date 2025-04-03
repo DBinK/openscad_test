@@ -1,8 +1,8 @@
 include <BOSL2/std.scad>
 
-$fn = 256;  // 碎片数量
-$fa = 0.1;  // 最小角度
-$fs = 0.1;  // 最小尺寸
+$fn = 25;   // 碎片数量
+$fa = 0.2;  // 最小角度
+$fs = 0.2;  // 最小尺寸
 
 /*[ 板子参数 ]*/
 board_thickness = 3;   // 板厚 
@@ -15,9 +15,12 @@ num_holes_x = 8;       // X方向的孔数
 num_holes_y = 6;       // Y方向的孔数
 
 /*[ 孔洞参数 ]*/
-hole_spacing_x = 20;   // X方向孔之间的距离
+hole_spacing_x = 10;   // X方向孔之间的距离
 hole_spacing_y = 20;   // Y方向孔之间的距离
-hole_radius    = 3.2;  // 孔的半径
+
+hole_length = 3;       // 孔的长度
+hole_width  = 9;       // 孔的宽度
+hole_radius = 1.5;     // 孔的圆角半径
 
 
 // 颜色
@@ -45,7 +48,10 @@ module pegboard() {
         for (i = [0 : num_holes_x - 1]) {
             for (j = [0 : num_holes_y - 1]) {
                 translate([i * hole_spacing_x, j * hole_spacing_y, board_thickness / 2]) {
-                    cylinder(h = board_thickness + 1, r = hole_radius, center = true);
+                    // cylinder(h = board_thickness + 1, r = hole_radius, center = true);
+                    cuboid([hole_length, hole_width, board_thickness * 4], 
+                        rounding = hole_radius,
+                        edges = "Z");
                 }
             }
         }
