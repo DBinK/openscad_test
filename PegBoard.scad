@@ -30,31 +30,42 @@ hole_radius = 1.5;     // 孔的圆角半径
 raw_length = hole_spacing_x * (num_holes_x - 1);
 raw_width  = hole_spacing_y * (num_holes_y - 1);
 
-// 主模块
-module pegboard() {
-    // 创建板子
-    difference() {
-        // 创建整体板子
-        // color(hole_color) 
-        translate([raw_length/2, raw_width/2, board_thickness/2]) {
-            cuboid([raw_length + board_surround*2,
-                raw_width + board_surround*2,
-                board_thickness], 
-                rounding = board_radius,
-                edges = "Z");
-        }
+// 判断孔的半径是否过大, 如果过大则缩小到短边的一半
+// max_hole_radius = min(hole_length, hole_width) / 2;
+// hole_radius = hole_radius > max_hole_radius ? max_hole_radius : hole_radius;
 
-        // 创建孔
-        for (i = [0 : num_holes_x - 1]) {
-            for (j = [0 : num_holes_y - 1]) {
-                translate([i * hole_spacing_x, j * hole_spacing_y, board_thickness / 2]) {
-                    // cylinder(h = board_thickness + 1, r = hole_radius, center = true);
-                    cuboid([hole_length, hole_width, board_thickness * 4], 
-                        rounding = hole_radius,
-                        edges = "Z");
-                }
+
+// 创建板子
+module baseboard() {
+    translate([raw_length/2, raw_width/2, board_thickness/2]) {
+        cuboid([raw_length + board_surround*2,
+            raw_width + board_surround*2,
+            board_thickness], 
+            rounding = board_radius,
+            edges = "Z");
+    } 
+}
+
+// 创建孔
+module holes() {
+    for (i = [0 : num_holes_x - 1]) {
+        for (j = [0 : num_holes_y - 1]) {
+            translate([i * hole_spacing_x, j * hole_spacing_y, board_thickness / 2]) {
+                // cylinder(h = board_thickness + 1, r = hole_radius, center = true);
+                cuboid([hole_length, hole_width, board_thickness * 4], 
+                    rounding = hole_radius,
+                    edges = "Z");
             }
         }
+    }
+}
+
+// 主模块
+module pegboard() {
+    // 板子与孔的差集
+    difference() {
+        baseboard();
+        holes();
     }
 }
 
